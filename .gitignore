@@ -1,6 +1,6 @@
 target/
-+*.versionsBackup
-+.idea/
-+.vscode/
-+*.iml
-+.DS_Store
+*.versionsBackup
+.idea/
+.vscode/
+*.iml
+.DS_Store
