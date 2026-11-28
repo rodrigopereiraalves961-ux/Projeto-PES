@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Build, testes e qualidade
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: harness
+    steps:
+      - name: Obter o código
+        uses: actions/checkout@v7
+
+      - name: Instalar Java 21
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: harness/pom.xml
+
+      - name: mvn verify (Checkstyle, testes, JaCoCo, SpotBugs)
+        run: mvn -B verify
+
+      - name: Guardar relatórios
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: relatorios-qualidade
+          path: |
+            harness/target/site/jacoco/
+            harness/target/checkstyle-result.xml
+            harness/target/spotbugsXml.xml
+            harness/target/surefire-reports/
+          if-no-files-found: ignore
+
+  docker:
+    name: Build da imagem Docker
+    runs-on: ubuntu-24.04
+    needs: verify
+    steps:
+      - name: Obter o código
+        uses: actions/checkout@v7
+
+      - name: docker build
+        run: docker build -t harness:ci harness
+
+      - name: Correr o contentor
+        run: docker run --rm harness:ci
