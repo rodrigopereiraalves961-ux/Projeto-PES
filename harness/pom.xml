@@ -8,10 +8,10 @@
   <name>harness</name>
   <url>http://maven.apache.org</url>
 
-<properties>
+  <properties>
     <maven.compiler.release>21</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-     <jacoco.minimum.coverage>0.80</jacoco.minimum.coverage>
+    <jacoco.minimum.coverage>0.80</jacoco.minimum.coverage>
   </properties>
 
   <dependencies>
@@ -23,12 +23,26 @@
     </dependency>
   </dependencies>
 
-    <build>
+  <build>
+    <finalName>harness</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.16.0</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>pt.ul.fc.App</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
       </plugin>
 
       <plugin>
