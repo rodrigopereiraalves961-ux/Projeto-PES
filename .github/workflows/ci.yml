@@ -59,4 +59,4 @@ jobs:
         run: docker build -t harness:ci harness
 
       - name: Correr o contentor
-        run: docker run --rm harness:ci
+        run: docker run --rm harness:ci help

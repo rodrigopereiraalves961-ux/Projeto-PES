@@ -23,5 +23,5 @@ RUN useradd --system --no-create-home harness
 USER harness
 
 # Copia só o .jar gerado na build.
-COPY --from=build /app/target/harness-*.jar app.jar
-ENTRYPOINT ["java", "-cp", "app.jar", "pt.ul.fc.App"]
+COPY --from=build /app/target/harness.jar app.jar
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
